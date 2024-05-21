@@ -69,7 +69,10 @@ protected:
 
     void tls() const {
         if( obj->ctx.get_ctx() == nullptr ){ return; }
-        push("STARTTLS"); obj->fd.read();
+        push("STARTTLS"); auto header = read_header(); 
+        if( header.status >= 500 ){
+            process::error("auth pass not accepted");
+        } elif( header.status >= 400 ) { return; }
 
         obj->ssl = ssl_t( obj->ctx, obj->fd.get_fd() ); 
         obj->ssl.set_hostname( obj->hostname );
@@ -168,8 +171,8 @@ public:
         string_t user = string::format("%s@%s",auth.user.get(), auth.serv.get() );
     coStart
         handshake(); if ( obj->extd ){ tls(); } switch ( auth.type ) {
-            case AUTH_PLAIN: auth_plain( auth ); break;
-            case AUTH_OAUTH: auth_oauth( auth ); break;
+            case MAIL_AUTH_PLAIN: auth_plain( auth ); break;
+            case MAIL_AUTH_OAUTH: auth_oauth( auth ); break;
             default: process::error("AUTH NOT SUPPORTED"); break; 
         }   coSet(1); goto NEXT; coYield(1); NEXT:;
         mail_from( user ); mail_to( email ); send_msg( msg );
@@ -197,7 +200,7 @@ public:
         } while( state == -2 ); return string_t ( buffer.get(), state );
     }
 
-    int close() const noexcept {
+    void close() const noexcept {
         if( !obj->fd.is_available() ){ return; }
              push( "QUIT" ); free();
     }
