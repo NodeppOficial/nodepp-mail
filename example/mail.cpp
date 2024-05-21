@@ -13,7 +13,7 @@ void onMain() {
         .user = "bececrazy2",
         .pass = "0123456789",
         .serv = "google.com",
-        .type = AUTH_PLAIN
+        .type = MAIL_AUTH_OAUTH
     };
 
     mail.send( auth, "becerracenmanueld@gmail.com", "tarea", "hola mundo!" );

@@ -10,15 +10,14 @@
 namespace nodepp {
 
     enum AUTH_TYPE {
-         AUTH_PLAIN,
-         AUTH_OAUTH
+         MAIL_AUTH_PLAIN,
+         MAIL_AUTH_OAUTH
     };
 
     struct mail_auth_t {
         string_t user;
-        string_t pass;
-        string_t serv;
-        AUTH_TYPE type=AUTH_PLAIN;
+        string_t pass; string_t serv;
+        AUTH_TYPE type=MAIL_AUTH_PLAIN;
     }; 
 
     struct mail_header_t {
