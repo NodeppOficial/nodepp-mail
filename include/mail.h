@@ -14,16 +14,15 @@ namespace nodepp {
          MAIL_AUTH_OAUTH
     };
 
-    struct mail_auth_t {
-        string_t user;
-        string_t pass; string_t serv;
-        AUTH_TYPE type=MAIL_AUTH_PLAIN;
-    }; 
-
     struct mail_header_t {
         string_t message;
         int      status;
     };
+
+    struct mail_auth_t {
+        string_t user; string_t pass;
+        AUTH_TYPE type=MAIL_AUTH_PLAIN;
+    }; 
 
 }
 
@@ -69,7 +68,8 @@ protected:
 
     void tls() const {
         if( obj->ctx.get_ctx() == nullptr ){ return; }
-        push("STARTTLS"); auto header = read_header(); 
+        push("STARTTLS"); auto header = read_header();
+        
         if( header.status >= 500 ){
             process::error("auth pass not accepted");
         } elif( header.status >= 400 ) { return; }
@@ -168,14 +168,13 @@ public:
     }
 
     int send ( mail_auth_t auth, string_t email, string_t subject, string_t msg ) const {
-        string_t user = string::format("%s@%s",auth.user.get(), auth.serv.get() );
     coStart
         handshake(); if ( obj->extd ){ tls(); } switch ( auth.type ) {
             case MAIL_AUTH_PLAIN: auth_plain( auth ); break;
             case MAIL_AUTH_OAUTH: auth_oauth( auth ); break;
             default: process::error("AUTH NOT SUPPORTED"); break; 
         }   coSet(1); goto NEXT; coYield(1); NEXT:;
-        mail_from( user ); mail_to( email ); send_msg( msg );
+        mail_from( auth.user ); mail_to( email ); send_msg( msg );
     coGoto(1);
     coStop
     }

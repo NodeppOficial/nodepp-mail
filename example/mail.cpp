@@ -10,12 +10,11 @@ void onMain() {
     mail_t mail ( "smtp://smtp.gmail.com:587", &ssl );
 
     mail_auth_t auth = {
-        .user = "bececrazy2",
-        .pass = "0123456789",
-        .serv = "google.com",
+        .user = "bececrazy2@gmail.com",
+        .pass = "MyGmailPassword",
         .type = MAIL_AUTH_OAUTH
     };
 
-    mail.send( auth, "becerracenmanueld@gmail.com", "tarea", "hola mundo!" );
+    mail.send( auth, "becerracenmanueld@gmail.com", "subject", "Hello World!" );
 
 }
