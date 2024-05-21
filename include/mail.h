@@ -100,14 +100,14 @@ protected:
     }
 
     void mail_from( string_t email ) const {
-        push( string::format("MAIL FROM: <%s>", email) );
+        push( string::format("MAIL FROM: <%s>", email.get() ) );
         auto header = read_header(); if( header.status >= 400 ){
              process::error("auth pass not accepted");
         }
     }
 
     void mail_to( string_t email ) const {
-        push( string::format("RCPT TO: <%s>", email) );
+        push( string::format("RCPT TO: <%s>", email.get() ) );
         auto header = read_header(); if( header.status >= 400 ){
              process::error("auth pass not accepted");
         }
