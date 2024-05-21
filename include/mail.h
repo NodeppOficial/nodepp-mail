@@ -53,14 +53,14 @@ protected:
 
         push("EHLO nodepp-mail");
 
-        header = read_header();  if ( header.status <  300 )
+        header = read_header();  if ( header.status <  400 )
         { obj->extd=1; return; } if ( header.status >= 500 ){ 
             process::error("Can't connect to the server");
         }
 
         push("HELO nodepp-mail");
 
-        header = read_header(); if( header.status < 300 )
+        header = read_header(); if( header.status < 400 )
         { return; } if ( header.status >= 500 ){ 
             process::error("Can't connect to the server");
         }
