@@ -135,7 +135,7 @@ public:
         auto prs = url::parse( uri );
 
         obj->fd = socket_t();
-        obj->fd.PROT  = IPPROTO_TCP;
+        obj->fd.IPPTOTO= IPPROTO_TCP;
         obj->hostname = prs.hostname;
         obj->fd.socket( dns::lookup(prs.hostname), prs.port );
 
@@ -154,7 +154,7 @@ public:
 
         obj->ctx = *ssl;
         obj->fd  = socket_t();
-        obj->fd.PROT  = IPPROTO_TCP;
+        obj->fd.IPPTOTO= IPPROTO_TCP;
         obj->hostname = prs.hostname;
         obj->fd.socket( dns::lookup(prs.hostname), prs.port );
 
